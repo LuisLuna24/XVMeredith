@@ -1,0 +1,280 @@
+---
+interface Props {
+    name: string;
+}
+const { name } = Astro.props;
+---
+
+<style>
+    .hero {
+        padding: 3rem 1.25rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #c9b896, transparent);
+        opacity: 0.6;
+    }
+
+    .hero-invitation {
+        font-family: "Bodoni Moda", serif;
+        font-size: 1.125rem;
+        font-weight: 400;
+        line-height: 1.3;
+        color: #5a5a5a;
+        margin: 0 0 1.5rem;
+        letter-spacing: 0.01em;
+    }
+
+    .monogram-wrapper {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .monogram-ring {
+        position: absolute;
+        inset: -16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 50%;
+        background: linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(240, 240, 240, 0.6) 100%
+        );
+        box-shadow:
+            0 4px 24px rgba(0, 0, 0, 0.04),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        opacity: 0.5;
+    }
+
+    .monogram-ring::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #c9b896, transparent);
+        opacity: 0.8;
+    }
+
+    .monogram-image {
+        position: relative;
+        z-index: 1;
+        width: 140px;
+        height: 140px;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 24px rgba(60, 10, 20, 0.12));
+    }
+
+    .hero-name {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 500;
+        line-height: 1.05;
+        color: #1a1a1a;
+        letter-spacing: -0.02em;
+        margin: 0 0 1rem;
+    }
+
+    .hero-event {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-event-divider {
+        flex: 1;
+        max-width: 60px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #c9b896, transparent);
+        opacity: 0.6;
+    }
+
+    .hero-event-label {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        color: #a00000;
+        white-space: nowrap;
+    }
+
+    .hero-date-card {
+        display: inline-grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 2rem;
+        padding: 2rem 2.5rem;
+        background: linear-gradient(145deg, #fafafa 0%, #f0f0f0 100%);
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        box-shadow:
+            0 4px 24px rgba(0, 0, 0, 0.06),
+            0 1px 3px rgba(0, 0, 0, 0.04),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-date-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #c9b896, transparent);
+        opacity: 0.8;
+    }
+
+    .hero-date-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #a00000, transparent);
+        opacity: 0.6;
+    }
+
+    .hero-date-card > * {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .hero-date-divider {
+        width: 1px;
+        height: 80px;
+        background: linear-gradient(
+            180deg,
+            transparent,
+            #e0e0e0 30%,
+            #e0e0e0 70%,
+            transparent
+        );
+    }
+
+    .hero-date-day {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 1.125rem;
+        font-weight: 500;
+        color: #1a1a1a;
+        letter-spacing: -0.01em;
+        margin: 0;
+        text-align: center;
+    }
+
+    .hero-date-day-label {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #8a7a6a;
+        margin: 0;
+    }
+
+    .hero-date-center {
+        text-align: center;
+    }
+
+    .hero-date-number {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(3.5rem, 9vw, 5.5rem);
+        font-weight: 500;
+        line-height: 1;
+        color: #a00000;
+        letter-spacing: -0.03em;
+        margin: 0;
+    }
+
+    .hero-date-month {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.35em;
+        color: #8a7a6a;
+        margin: 0;
+    }
+
+    .hero-date-time {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 1.125rem;
+        font-weight: 400;
+        font-style: italic;
+        color: #3a3a3a;
+        margin: 0;
+        text-align: center;
+    }
+
+    .hero-date-time-label {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #8a7a6a;
+        margin: 0;
+    }
+</style>
+
+<section class="hero" data-hero aria-label="Encabezado de la invitación">
+    <p class="hero-invitation" data-hero-item>Te invito a festejar</p>
+
+    <!-- Monograma M15 + cerezas -->
+    <div class="monogram-wrapper" data-hero-item>
+        <div class="monogram-ring" aria-hidden="true"></div>
+        <img
+            src="/img/monograma.webp"
+            alt="Monograma de Valeria"
+            class="monogram-image"
+        />
+    </div>
+
+    <h2 class="hero-name" data-hero-item>
+        {name}
+    </h2>
+
+    <div class="hero-event" data-hero-item>
+        <span class="hero-event-divider" aria-hidden="true"></span>
+        <p class="hero-event-label">GALA DE QUINCEAÑERA</p>
+        <span class="hero-event-divider" aria-hidden="true"></span>
+    </div>
+
+    <!-- Fecha -->
+    <div class="mt-8 border-y-2 border-[#2b2320]/80 py-5" data-hero-item>
+        <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+            <p class="font-didone text-2xl text-[#2b2320]">Viernes</p>
+            <div class="border-x-2 border-[#2b2320]/70 px-8">
+                <p class="font-didone text-7xl font-medium leading-none">20</p>
+                <p
+                    class="font-didone mt-1 text-[11px] font-bold tracking-[0.35em] text-[#2b2320]"
+                >
+                    Nobiembre
+                </p>
+            </div>
+            <p class="font-didone text-2xl italic">2026</p>
+        </div>
+    </div>
+</section>

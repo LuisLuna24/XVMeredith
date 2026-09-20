@@ -1,0 +1,312 @@
+---
+import Cardubi from "../components/Cardubi.astro";
+import Mesa from "../components/Mesa.astro";
+import Layout from "../layouts/Layout.astro";
+import Contador from "../components/Contador.astro";
+import Foto from "../components/Foto.astro";
+import Rsvp from "../components/Rsvp.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Entrada from "../components/Entrada.astro";
+
+const name = "MEREDITH ZAVALA";
+---
+
+<Layout title="Valeria Sofía · Gala de Quinceañera · 18 Octubre">
+  <div
+    x-data="invitacion()"
+    x-init="init()"
+    class="min-h-dvh w-full bg-[#e9eaed] flex justify-center"
+  >
+    <!-- Música de fondo: coloca tu canción en public/musica.mp3 -->
+    <audio id="bg-music" loop preload="auto" src="/music/musica.mp3"></audio>
+
+    <!-- ============ PANTALLA DE ENTRADA ============ -->
+
+    <Entrada name={name} />
+    <!-- ============ CONTENIDO PRINCIPAL ============ -->
+    <div
+      class="w-full max-w-[530px] px-3 pb-12 pt-6 sm:px-4 pointer-events-none"
+      id="main-content"
+      style="opacity: 0; transform: translateY(16px);"
+    >
+      <!-- Barra superior -->
+      <Header />
+
+      <main
+        id="invitacion"
+        class="overflow-hidden rounded-[28px] bg-[#fbf9f7] shadow-[0_30px_80px_-30px_rgba(60,10,20,0.35)] ring-1 ring-black/5"
+        tabindex="-1"
+      >
+        <!-- HERO -->
+        <Hero name={name} />
+        <!-- FOTO -->
+        <Foto />
+
+        <!-- COUNTDOWN -->
+        <Contador />
+
+        <!-- ITINERARIO -->
+        <section
+          class="px-[18px] pt-[24px]"
+          data-reveal
+          aria-label="Itinerario del evento"
+        >
+          <!-- Título -->
+          <p
+            class="flex items-center gap-[10px] whitespace-nowrap font-sans text-[10px] font-bold leading-none tracking-[0.28em] text-[#2b2320]"
+          >
+            <span class="h-px flex-1 bg-[#d1d5db]" aria-hidden="true"></span>
+            ITINERARIO DEL EVENTO
+            <span class="h-px flex-1 bg-[#d1d5db]" aria-hidden="true"></span>
+          </p>
+
+          <!-- Eventos -->
+          <div class="mt-[18px] space-y-[12px]">
+            <!-- RECEPCIÓN -->
+            <Cardubi
+              title="Salones San Pedro Plus"
+              time="20:00HRS"
+              map="https://maps.app.goo.gl/YCJ9DUH7k4LD8vSY7"
+              type="RECEPCIÓN & GALA"
+              typeIcon="🌐"
+              color="#a00000"
+              address="Calle Nte 84 6507, San Pedro el Chico, Gustavo A. Madero, 07480, CDMX"
+            />
+          </div>
+        </section>
+
+        <!-- MESA DE REGALOS -->
+        <Mesa />
+
+        <!-- RSVP -->
+        <Rsvp
+          name="MEREDITH ZAVALA"
+          whatsappNumber="+525547812216"
+          whatsappMessage="Hola Meredith, confirmo mi asistencia a tu Gala de Quinceañera del 18 de Octubre."
+          deadline="10 de Noviembre de 2026"
+        />
+      </main>
+
+      <p class="mt-8 text-center text-xs tracking-[0.2em] text-[#6b5f5a]">
+        MEREDITH ZAVALA
+      </p>
+    </div>
+  </div>
+
+  <script>
+    import Alpine from "alpinejs";
+    import { gsap } from "gsap";
+
+    // @ts-ignore
+    window.Alpine = Alpine;
+
+    // Curvas suaves de alta gama (filosofía Emil Kowalski)
+    const EASE_SOFT = "cubic-bezier(0.16, 1, 0.3, 1)"; // Quintic suave para UI y revelados
+    const EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)"; // Curva estándar precisa
+
+    // @ts-ignore
+    Alpine.data("invitacion", () => ({
+      entered: false,
+      playing: false,
+      audioError: false,
+      dias: 51,
+      horas: 3,
+      minutos: 28,
+      segundos: 53,
+      target: new Date("2026-10-18T18:00:00-06:00").getTime(),
+      timer: null,
+
+      init() {
+        document.documentElement.classList.add("locked");
+        this.tick();
+        // @ts-ignore
+        this.timer = setInterval(() => this.tick(), 1000);
+
+        // Animar suavemente los elementos de la tarjeta de bienvenida al entrar a la página
+        gsap.fromTo(
+          "[data-entry]",
+          { y: 16, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+            ease: EASE_SOFT,
+            stagger: 0.07,
+            delay: 0.1,
+            overwrite: "auto",
+          },
+        );
+
+        // Estado inicial de los elementos del hero (se revelan al entrar de forma escalonada)
+        gsap.set("[data-hero-item]", { y: 14, opacity: 0 });
+      },
+
+      pad(n) {
+        return String(Math.max(0, n)).padStart(2, "0");
+      },
+
+      tick() {
+        const diff = this.target - Date.now();
+        if (diff <= 0) {
+          this.dias = 0;
+          this.horas = 0;
+          this.minutos = 0;
+          this.segundos = 0;
+          return;
+        }
+        this.dias = Math.floor(diff / 86400000);
+        this.horas = Math.floor((diff / 3600000) % 24);
+        this.minutos = Math.floor((diff / 60000) % 60);
+        this.segundos = Math.floor((diff / 1000) % 60);
+      },
+
+      async entrar() {
+        if (this.entered) return;
+        this.entered = true;
+
+        // Reproducir música sin congelar la animación visual
+        this.playMusica();
+
+        const overlay = document.getElementById("entry-overlay");
+        const overlayCard = document.getElementById("entry-card");
+        const mainContent = document.getElementById("main-content");
+
+        // 1) Habilitar interacción y desbloquear scroll inmediatamente
+        if (overlay) overlay.style.pointerEvents = "none";
+        document.documentElement.classList.remove("locked");
+        if (mainContent) mainContent.classList.remove("pointer-events-none");
+
+        // 2) Desaparición gradual y elegante del overlay (850ms)
+        if (overlay) {
+          gsap.to(overlay, {
+            opacity: 0,
+            duration: 0.85,
+            ease: EASE_SOFT,
+            onComplete: () => {
+              overlay.style.display = "none";
+            },
+          });
+        }
+
+        if (overlayCard) {
+          gsap.to(overlayCard, {
+            y: -12,
+            scale: 0.98,
+            opacity: 0,
+            duration: 0.65,
+            ease: EASE_SOFT,
+          });
+        }
+
+        // 3) Aparición suave simultánea del contenido principal (crossfade fluido sin saltos)
+        if (mainContent) {
+          gsap.to(mainContent, {
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            ease: EASE_SOFT,
+          });
+        }
+
+        // 4) Revelado escalonado y sutil del hero
+        gsap.to("[data-hero-item]", {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: EASE_SOFT,
+          stagger: 0.05,
+          delay: 0.15,
+          onComplete: () => {
+            document
+              .getElementById("invitacion")
+              ?.focus({ preventScroll: true });
+          },
+        });
+
+        // 5) Inicializar revelado por scroll suave e infalible
+        this.initScrollReveals();
+      },
+
+      initScrollReveals() {
+        if (!("IntersectionObserver" in window)) {
+          document.querySelectorAll("[data-reveal]").forEach((el) => {
+            el.classList.add("revealed");
+          });
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("revealed");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            root: null,
+            rootMargin: "0px 0px -40px 0px",
+            threshold: 0.08,
+          },
+        );
+
+        document.querySelectorAll("[data-reveal]").forEach((el) => {
+          observer.observe(el);
+        });
+
+        // Verificación de respaldo para elementos que ya estén en pantalla
+        setTimeout(() => {
+          document
+            .querySelectorAll("[data-reveal]:not(.revealed)")
+            .forEach((el) => {
+              const rect = el.getBoundingClientRect();
+              if (rect.top < window.innerHeight) {
+                el.classList.add("revealed");
+              }
+            });
+        }, 900);
+      },
+
+      async playMusica() {
+        const audio = document.getElementById("bg-music");
+        if (!(audio instanceof HTMLAudioElement)) return;
+        try {
+          audio.volume = 0.85;
+          await audio.play();
+          this.playing = true;
+          this.audioError = false;
+        } catch (e) {
+          this.playing = false;
+          this.audioError = true;
+        }
+      },
+
+      async toggleMusica() {
+        const audio = document.getElementById("bg-music");
+        if (!(audio instanceof HTMLAudioElement)) return;
+        if (audio.paused) {
+          await this.playMusica();
+        } else {
+          audio.pause();
+          this.playing = false;
+        }
+      },
+    }));
+
+    // Iniciar Alpine
+    // @ts-ignore
+    if (!window._alpineStarted) {
+      // @ts-ignore
+      window._alpineStarted = true;
+      Alpine.start();
+    }
+  </script>
+
+  <style>
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
+</Layout>

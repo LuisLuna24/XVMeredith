@@ -1,0 +1,317 @@
+---
+interface Props {
+    liverpoolNumber?: string;
+    liverpoolUrl?: string;
+    sobresMessage?: string;
+}
+
+const {
+    liverpoolNumber = "60043234",
+    liverpoolUrl = "https://mesaderegalos.liverpool.com.mx/milistaderegalos/60043234",
+    sobresMessage = "Tu presencia es mi mejor regalo; si gustas hacerme un obsequio, dispondremos de buzón en el salón.",
+} = Astro.props;
+---
+
+<style>
+    .mesa-section {
+        padding: 2.5rem 1.25rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header::before,
+    .section-header::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            #c9b896 50%,
+            transparent
+        );
+        opacity: 0.6;
+    }
+
+    .section-label {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        color: #1a1a1a;
+        white-space: nowrap;
+    }
+
+    .cards-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+        .cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    .gift-card {
+        background: linear-gradient(145deg, #fafafa 0%, #f0f0f0 100%);
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        padding: 1.75rem 1.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow:
+            0 4px 24px rgba(0, 0, 0, 0.06),
+            0 1px 3px rgba(0, 0, 0, 0.04),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .gift-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            #c9b896 50%,
+            transparent
+        );
+        opacity: 0.8;
+    }
+
+    .gift-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #a00000, transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .gift-card:hover {
+        border-color: #c9b896;
+        box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.1),
+            0 2px 8px rgba(0, 0, 0, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.95),
+            0 0 0 1px rgba(201, 184, 150, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .gift-card:hover::after {
+        opacity: 1;
+    }
+
+    .gift-card--accent {
+        background: linear-gradient(145deg, #fffbf5 0%, #fdf6eb 100%);
+        border-color: #e8dbc8;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .icon-wrapper svg {
+        stroke: #a00000;
+    }
+
+    .store-label {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #8a7a6a;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-title {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 1.25rem;
+        font-weight: 500;
+        line-height: 1.2;
+        color: #1a1a1a;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.25rem;
+    }
+
+    .card-subtitle {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        color: #3a3a3a;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .card-description {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #5a5a5a;
+        margin: 0;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.625rem;
+        margin-top: 1.25rem;
+        height: 48px;
+        padding: 0 1.5rem;
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid #d0d0d0;
+        background: #ffffff;
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #3a3a3a;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .action-btn:hover,
+    .action-btn:active {
+        border-color: #a00000;
+        background: #a00000;
+        color: #ffffff;
+        box-shadow: 0 2px 8px rgba(160, 0, 0, 0.25);
+    }
+
+    .action-btn:active {
+        transform: scale(0.98);
+    }
+
+    .action-btn svg {
+        stroke: currentColor;
+        flex-shrink: 0;
+    }
+
+    .action-btn--secondary {
+        background: #ffffff;
+        border-color: #e0e0e0;
+        color: #3a3a3a;
+    }
+
+    .action-btn--secondary:hover,
+    .action-btn--secondary:active {
+        border-color: #a00000;
+        background: #a00000;
+        color: #ffffff;
+    }
+</style>
+
+<section class="mesa-section" data-reveal aria-label="Mesa de regalos">
+    <div class="section-header">
+        <span class="section-label">MESA DE REGALOS</span>
+    </div>
+
+    <div class="cards-grid">
+        <article class="gift-card">
+            <div class="card-header">
+                <div class="icon-wrapper" aria-hidden="true">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        class="h-5 w-5"
+                    >
+                        <path d="M6 8h12l1 12H5L6 8Z"></path>
+                        <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="store-label">LIVERPOOL</p>
+                    <h3 class="card-title">Evento</h3>
+                    <p class="card-subtitle">{liverpoolNumber}</p>
+                </div>
+            </div>
+            <a
+                href={liverpoolUrl}
+                target="_blank"
+                rel="noopener"
+                class="action-btn"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    class="h-4 w-4"
+                    aria-hidden="true"
+                >
+                    <path
+                        d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                    ></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span>VER LISTA</span>
+            </a>
+        </article>
+
+        <article class="gift-card gift-card--accent">
+            <div class="card-header">
+                <div class="icon-wrapper" aria-hidden="true">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        class="h-5 w-5"
+                    >
+                        <rect x="3" y="5" width="18" height="14" rx="2.5"
+                        ></rect>
+                        <path d="M3.5 7l8.5 6 8.5-6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="card-title">Lluvia de Sobres</h3>
+                </div>
+            </div>
+            <p class="card-description">{sobresMessage}</p>
+        </article>
+    </div>
+</section>

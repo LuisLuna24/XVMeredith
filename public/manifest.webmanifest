@@ -1,0 +1,21 @@
+{
+  "name": "Valeria Sofía · Gala de Quinceañera",
+  "short_name": "Valeria XV",
+  "description": "Invitación digital para la Gala de Quinceañera de Valeria Sofía — 18 de Octubre 2026",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbf9f7",
+  "theme_color": "#6d0a1c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["entertainment", "lifestyle"],
+  "lang": "es",
+  "dir": "ltr"
+}
