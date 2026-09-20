@@ -224,7 +224,7 @@ const name = "MEREDITH ZAVALA";
           },
         });
 
-        // 5) Inicializar revelado por scroll suave e infalible
+        // 5) Inicializar revelado por scroll bidireccional
         this.initScrollReveals();
       },
 
@@ -236,18 +236,32 @@ const name = "MEREDITH ZAVALA";
           return;
         }
 
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
+              const el = entry.target;
+              const isScrollingDown = window.scrollY > lastScrollY;
+
               if (entry.isIntersecting) {
-                entry.target.classList.add("revealed");
-                observer.unobserve(entry.target);
+                // Reveal on intersection (scroll down OR initial load)
+                el.classList.remove("exiting");
+                el.classList.add("revealed");
+              } else {
+                // Exit only when scrolling up
+                if (!isScrollingDown) {
+                  el.classList.remove("revealed");
+                  el.classList.add("exiting");
+                  setTimeout(() => el.classList.remove("exiting"), 200);
+                }
               }
             });
           },
           {
             root: null,
-            rootMargin: "0px 0px -40px 0px",
+            rootMargin: "0px 0px -10% 0px",
             threshold: 0.08,
           },
         );
@@ -256,17 +270,26 @@ const name = "MEREDITH ZAVALA";
           observer.observe(el);
         });
 
-        // Verificación de respaldo para elementos que ya estén en pantalla
-        setTimeout(() => {
-          document
-            .querySelectorAll("[data-reveal]:not(.revealed)")
-            .forEach((el) => {
-              const rect = el.getBoundingClientRect();
-              if (rect.top < window.innerHeight) {
-                el.classList.add("revealed");
-              }
+        // Track scroll direction
+        window.addEventListener("scroll", () => {
+          lastScrollY = window.scrollY;
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(() => {
+              ticking = false;
             });
-        }, 900);
+          }
+        }, { passive: true });
+
+        // Fallback: ensure elements in viewport are revealed (runs after observer fires)
+        setTimeout(() => {
+          document.querySelectorAll("[data-reveal]:not(.revealed)").forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+              el.classList.add("revealed");
+            }
+          });
+        }, 150);
       },
 
       async playMusica() {
