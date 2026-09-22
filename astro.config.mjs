@@ -6,6 +6,7 @@ import alpinejs from '@astrojs/alpinejs';
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://xv-meredith.lunaweb.com.mx",
   vite: {
     plugins: [tailwindcss()],
   },
