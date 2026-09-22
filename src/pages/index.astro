@@ -8,18 +8,20 @@ import Rsvp from "../components/Rsvp.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Entrada from "../components/Entrada.astro";
+import Bestimenta from "../components/Bestimenta.astro";
+import SinNinos from "../components/SinNinos.astro";
 
 const name = "MEREDITH ZAVALA";
 ---
 
-<Layout title="Valeria Sofía · Gala de Quinceañera · 18 Octubre">
+<Layout title="Meredith Zavala · Gala de Quinceañera · 20 Noviembre">
   <div
     x-data="invitacion()"
     x-init="init()"
     class="min-h-dvh w-full bg-[#e9eaed] flex justify-center"
   >
     <!-- Música de fondo: coloca tu canción en public/musica.mp3 -->
-    <audio id="bg-music" loop preload="auto" src="/music/musica.mp3"></audio>
+    <audio id="bg-music" loop preload="auto" src="/music/music.mp3"></audio>
 
     <!-- ============ PANTALLA DE ENTRADA ============ -->
 
@@ -78,12 +80,18 @@ const name = "MEREDITH ZAVALA";
 
         <!-- MESA DE REGALOS -->
         <Mesa />
+        <!-- MESA DE REGALOS -->
+        <Bestimenta />
+
+        <SinNinos
+          message="Te esperamos para disfrutar de una velada muy especial entre adultos (evento sin niños)."
+        />
 
         <!-- RSVP -->
         <Rsvp
           name="MEREDITH ZAVALA"
           whatsappNumber="+525547812216"
-          whatsappMessage="Hola Meredith, confirmo mi asistencia a tu Gala de Quinceañera del 18 de Octubre."
+          whatsappMessage="Hola Meredith, confirmo mi asistencia a tu Gala de Quinceañera del 20 de Noviembre."
           deadline="10 de Noviembre de 2026"
         />
       </main>
@@ -114,7 +122,7 @@ const name = "MEREDITH ZAVALA";
       horas: 3,
       minutos: 28,
       segundos: 53,
-      target: new Date("2026-10-18T18:00:00-06:00").getTime(),
+      target: new Date("2026-11-20T20:00:00-06:00").getTime(),
       timer: null,
 
       init() {
@@ -271,24 +279,30 @@ const name = "MEREDITH ZAVALA";
         });
 
         // Track scroll direction
-        window.addEventListener("scroll", () => {
-          lastScrollY = window.scrollY;
-          if (!ticking) {
-            ticking = true;
-            requestAnimationFrame(() => {
-              ticking = false;
-            });
-          }
-        }, { passive: true });
+        window.addEventListener(
+          "scroll",
+          () => {
+            lastScrollY = window.scrollY;
+            if (!ticking) {
+              ticking = true;
+              requestAnimationFrame(() => {
+                ticking = false;
+              });
+            }
+          },
+          { passive: true },
+        );
 
         // Fallback: ensure elements in viewport are revealed (runs after observer fires)
         setTimeout(() => {
-          document.querySelectorAll("[data-reveal]:not(.revealed)").forEach((el) => {
-            const rect = el.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-              el.classList.add("revealed");
-            }
-          });
+          document
+            .querySelectorAll("[data-reveal]:not(.revealed)")
+            .forEach((el) => {
+              const rect = el.getBoundingClientRect();
+              if (rect.top < window.innerHeight && rect.bottom > 0) {
+                el.classList.add("revealed");
+              }
+            });
         }, 150);
       },
 
@@ -296,7 +310,7 @@ const name = "MEREDITH ZAVALA";
         const audio = document.getElementById("bg-music");
         if (!(audio instanceof HTMLAudioElement)) return;
         try {
-          audio.volume = 0.85;
+          audio.volume = 0.5;
           await audio.play();
           this.playing = true;
           this.audioError = false;

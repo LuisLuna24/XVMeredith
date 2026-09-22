@@ -1,0 +1,211 @@
+---
+interface Props {
+    title?: string;
+    message?: string;
+}
+
+const {
+    title = "Vestimenta",
+    message = "El color rojo es exclusivamente para la quinceañera. Se sugiere vestimenta formal en tonos neutros, pasteles o plateados para acompañar la elegancia del evento.",
+} = Astro.props;
+---
+
+<style>
+    .bestimenta-section {
+        padding: 2.5rem 1.25rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header::before,
+    .section-header::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            #b0b8c1 50%,
+            transparent
+        );
+        opacity: 0.6;
+    }
+
+    .section-label {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        color: #1a1a1a;
+        white-space: nowrap;
+    }
+
+    .info-card {
+        background: linear-gradient(145deg, #fafafa 0%, #f0f0f0 100%);
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        padding: 2rem 1.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow:
+            0 4px 24px rgba(0, 0, 0, 0.06),
+            0 1px 3px rgba(0, 0, 0, 0.04),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        max-width: 520px;
+        margin: 0 auto;
+    }
+
+    .info-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            #b0b8c1 50%,
+            transparent
+        );
+        opacity: 0.8;
+    }
+
+    .info-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #a00000, transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .info-card:hover {
+        border-color: #b0b8c1;
+        box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.1),
+            0 2px 8px rgba(0, 0, 0, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.95),
+            0 0 0 1px rgba(176, 184, 193, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .info-card:hover::after {
+        opacity: 1;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .icon-wrapper svg {
+        stroke: #a00000;
+    }
+
+    .info-title {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 1.5rem;
+        font-weight: 500;
+        line-height: 1.2;
+        color: #1a1a1a;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.75rem;
+    }
+
+    .info-description {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.7;
+        color: #5a5a5a;
+        margin: 0 0 1.5rem;
+    }
+
+    .color-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        background: #f0f2f5;
+        border: 1px solid #d0d8e0;
+        border-radius: 12px;
+    }
+
+    .color-swatch {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: #a00000;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(160, 0, 0, 0.3);
+    }
+
+    .color-label {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: #3a3a3a;
+        letter-spacing: 0.02em;
+    }
+</style>
+
+<section class="bestimenta-section" data-reveal aria-label="Vestimenta">
+    <div class="section-header">
+        <span class="section-label">{title}</span>
+    </div>
+
+    <article class="info-card">
+        <div class="card-header">
+            <div class="icon-wrapper" aria-hidden="true">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    class="h-6 w-6"
+                >
+                    <path d="M6 8h12l1 12H5L6 8Z"></path>
+                    <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="info-title">Indicación Importante</h3>
+            </div>
+        </div>
+        <p class="info-description">{message}</p>
+        <div class="color-indicator">
+            <span class="color-swatch" aria-hidden="true"></span>
+            <span class="color-label">Rojo — Exclusivo Quinceañera</span>
+        </div>
+    </article>
+</section>
